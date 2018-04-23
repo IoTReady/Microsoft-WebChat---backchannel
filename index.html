@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>chat bot</title>
+
+    <!-- CDN for styling -->
+    <link href="https://cdn.botframework.com/botframework-webchat/latest/botchat.css" rel="stylesheet" />
+
+    <style>
+        #BotChatGoesHere {
+            border: 1px solid rgba(51, 51, 51, 0.192);
+            float: left;
+            height: 500px;
+            position: relative;
+            width: 400px;
+        }
+        .userInfo {
+            position: fixed;
+            bottom: 80pt;
+            left: 50pt;
+        }
+        .userInfo > input {
+            font-size: 16px;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="BotChatGoesHere"></div>
+    <div class="userInfo">
+        <input type="text" name="userName" id="nameTxt" placeholder="Enter your name...">
+        <input type="button" value="Click" id="nameBtn">
+    </div>
+    <!-- Javascript CDN  -->
+    <script src="https://cdn.botframework.com/botframework-webchat/latest/botchat.js">
+    </script>
+
+    <script>
+        // const params = BotChat.queryParams(location.search);
+        /* Above is the method of passing information thought URL */
+
+        var params = {};
+        var secret = "<---Your Secret--->";
+
+        const user = {
+            id: params['userid'] || "abc",
+            name: params['username'] || "Mr.abc"
+        };
+        const bot = {
+            id: params['botid'],
+            name: params['botname']
+        };
+        
+        // API call for generating token
+        function generateToken() {
+            var url = "https://directline.botframework.com/v3/directline/tokens/generate";
+            var options = {
+                headers: {
+                    Authorization: "Bearer <---your secret--->"
+                },
+                method: "POST"
+            }
+            fetch(url, options)
+                .then(resp => resp.json())
+                .then(data => {
+                    token = data.token;
+                    console.log("checking the data: ",data);
+                    // setting the token
+                    const botConnection = new BotChat.DirectLine({
+                        domain: params['domain'],
+                        // secret: secret,
+                        token: token,
+                        webSocket: params['webSocket'] && params['webSocket'] === 'true' // defaults to true
+                    });
+                    
+                    console.log(botConnection);
+                    
+                    // calling the botframework after getting the values
+                    BotChat.App({
+                        bot: bot,
+                        botConnection: botConnection,
+                        // locale: 'es-es', // override locale to Spanish
+                        user: user
+                    }, document.getElementById('BotChatGoesHere'));
+
+
+                     botConnection.activity$
+                        .filter(function (activity) {
+                            return activity.type === 'event' && activity.name === 'changeHeader';
+                        })
+                        .subscribe(function (activity) {
+                            console.log('Received with value: ' + activity.value);
+                            changeHeader(activity.value);
+                        });
+
+                        function postButtonMessage(name) {
+                            botConnection
+                                .postActivity({
+                                    from: {
+                                        id: user.id
+                                    },
+                                    name: 'enterName',
+                                    type: 'event',
+                                    value: name
+                                })
+                                .subscribe(function (id) {
+                                    console.log('"enterName" sent');
+                                });
+                        };
+
+                        var clickBtn = document.getElementById('nameBtn');
+                        var textBox = document.getElementById('nameTxt');
+
+                        clickBtn.addEventListener('click',(event)=>{
+                            // console.log(textBox.value);
+                            postButtonMessage(textBox.value);
+                            user.name = textBox.value;
+                        });
+                })
+                .catch((error) => {
+                    callback(error);
+                })
+        };
+        
+        generateToken();
+        
+        function changeHeader(newColor) {
+            document.querySelector('.wc-header span').innerText = 'Creative Bot'
+            document.querySelector('.wc-header').style.background = '#2c214a';
+        }
+
+    </script>
+</body>
+
+</html>

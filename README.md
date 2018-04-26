@@ -5,8 +5,12 @@
 ## WebChat (index.html)
 * This sample code is to show how to connect webchat to the backend code (node js) using backchannel;
 * Two CDN are used for bot Framwork
-    ```one in the header as link tag for styling the bot.```
-    ```another in body as script tag for functioning.```
+    ```
+    one in the header as link tag for styling the bot.
+    ```
+    ```
+    another in body as script tag for functioning.
+    ```
 
 * In order to start the chat with bot we need only secret and that has to placed inside the botConnection object.
 * finding secret is provide on the microsoft website
@@ -26,8 +30,10 @@ https://docs.microsoft.com/en-us/azure/bot-service/rest-api/bot-framework-rest-d
 * ngrok will tunnel all the endpoint to our code, for details see https://ngrok.com/
 
 * We have to paste the generated url : Go to https://portal.azure.com
-    ```Dashboard > Web app bot > settings > messaging endpoint```
-*            (eg:  https://4e2da73b.ngrok.io/api/messages)
+    ```
+    Dashboard > Web app bot > settings > messaging endpoint
+    ```
+> (eg:  https://4e2da73b.ngrok.io/api/messages)
 
 * Now, we can play with the webchat bot.
 

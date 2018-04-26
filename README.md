@@ -17,7 +17,7 @@ https://docs.microsoft.com/en-us/azure/bot-service/rest-api/bot-framework-rest-d
 * In this code, a POST request is sent using fetch. and response is captured.
 * But this POST request is  Asynchronous in nature.
 
-## backend(node JS)
+## Backend(node JS)
 * To check the sample code either we should have our own backend code(this sample is using Node JS) or we can clone the repository.
 * Run npm install command in the cloned folder.
 * If we are having our backend code then we should simply copied the code of app.js file. And start our server.
@@ -27,7 +27,7 @@ https://docs.microsoft.com/en-us/azure/bot-service/rest-api/bot-framework-rest-d
 
 * We have to paste the generated url : Go to https://portal.azure.com
     ```Dashboard > Web app bot > settings > messaging endpoint```
-            (eg:  https://4e2da73b.ngrok.io/api/messages)
+*            (eg:  https://4e2da73b.ngrok.io/api/messages)
 
 * Now, we can play with the webchat bot.
 
